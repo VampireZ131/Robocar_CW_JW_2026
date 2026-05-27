@@ -55,7 +55,14 @@ def drive_straight(drive_speed, direction):
 def line_detection_start_driving():
     while True:
         if sensor.sensor_line("mid"):
-            drive_straight(50, "f")
+            drive_straight(10, "f")
+            time.sleep(0.2)
+        elif sensor.sensor_line("right")
+            turn_right(10, 10)
+            time.sleep(0.2)
+        elif sensor.sensor_line("left")
+            turn_left(10, 10)
+            time.sleep(0.2)
         else:
             stop_all_wheels()
 
