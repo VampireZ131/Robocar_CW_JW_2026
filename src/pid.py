@@ -90,13 +90,13 @@ def calc_average_value(values_list, orientation):
         number_to_divide = values_list.qsize()
         if orientation == "right" and number_to_divide > 0:
             global average_right
-            average_right = sum(list(values_list.queue)) / number_to_divide
+            average_right = round(sum(list(values_list.queue)) / number_to_divide, 1)
         elif orientation == "left" and number_to_divide > 0:
             global average_left
-            average_left = sum(list(values_list.queue)) / number_to_divide
+            average_left = round(sum(list(values_list.queue)) / number_to_divide, 1)
         elif orientation == "mid" and number_to_divide > 0:
             global average_mid
-            average_mid = sum(list(values_list.queue)) / number_to_divide
+            average_mid = round(sum(list(values_list.queue)) / number_to_divide, 1)
 
 
 values_to_process_mid = threading.Thread(
