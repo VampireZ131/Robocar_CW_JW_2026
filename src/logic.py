@@ -8,6 +8,7 @@ motor.init()
 position_of_line = queue.Queue(maxsize=1)
 speed_left_wheel = queue.Queue(maxsize=1)
 speed_right_wheel = queue.Queue(maxsize=1)
+last_position_for_pid = 0.0
 
 
 def stop_all_wheels():
@@ -45,18 +46,26 @@ def calculate_position():
         # -1 line is left, 0 line ist middle, 1 line is right
 
 
-def set_speed_to_drive(base_speed, turn_faktor):
-    global position_of_line, speed_right_wheel, speed_left_wheel
+def pid_drive(base_speed, kp, ki, kd):
+    global position_of_line, speed_right_wheel, speed_left_wheel, last_position_for_pid
+    difference_summe_for_i = 0.0
     while True:
         position = position_of_line.get()
-        speed_left = base_speed + (position * turn_faktor)
-        speed_right = base_speed - (position * turn_faktor)
-        speed_left_wheel.put(speed_left)
+        difference_summe_for_i += position
+        correction_factor = (
+            (position * kp)
+            + (difference_summe_for_i * ki)
+            + (kd * (position - last_position_for_pid))
+        )
+        last_position_for_pid = position
+        speed_left = base_speed + correction_factor
+        speed_right = base_speed - correction_factor
         speed_right_wheel.put(speed_right)
+        speed_left_wheel.put(speed_left)
 
 
 direction_calculation = threading.Thread(target=calculate_position)
-speed_setting = threading.Thread(target=set_speed_to_drive, args=(30, 30))
+speed_setting = threading.Thread(target=pid_drive, args=(10, 30, 0.5, 5))
 drive_test = threading.Thread(
     target=drive_in_direction, args=(speed_left_wheel, speed_right_wheel)
 )
