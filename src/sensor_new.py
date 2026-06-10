@@ -19,19 +19,19 @@ def pos_sensor_over_line(sensor_orientation):
         return sensor_value_mid
 
 
-def detect_error(sensor_left, sensor_mid, sensor_right):
-    full_left = -1.0
-    half_left = -0.5
-    mid = 0.0
-    half_right = -0.5
-    full_right = 1.0
+def detect_position(sensor_left, sensor_mid, sensor_right):
+    FULL_LEFT = -1.0
+    HALF_LEFT = -0.5
+    MID = 0.0
+    HALF_RIGHT = -0.5
+    FULL_RIGHT = 1.0
     if not sensor_left and sensor_mid and not sensor_right:
-        return mid
+        return MID
     elif sensor_left and not sensor_mid and not sensor_right:
-        return full_left
+        return FULL_LEFT
     elif not sensor_left and not sensor_mid and sensor_right:
-        return full_right
+        return FULL_RIGHT
     elif sensor_left and sensor_mid and not sensor_right:
-        return half_left
+        return HALF_LEFT
     elif not sensor_left and sensor_mid and sensor_right:
-        return half_right
+        return HALF_RIGHT

@@ -1,0 +1,8 @@
+{
+    "refreshrate in Hz": 200,
+    "base speed": 30,
+    "proportional factor": 25,
+    "integral factor": 0.05,
+    "derivativ factor": 10,
+    "dynamicspeed factor": 20
+}
