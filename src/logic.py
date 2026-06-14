@@ -1,63 +1,44 @@
-import motor
 import time
+
 import sensor
 
-motor.init()
+last_pos_for_pid = 0.0
+integral = 0.0
 
-def stop_all_wheels():
-    motor.front_left(0)
-    motor.front_right(0)
-    motor.rear_left(0)
-    motor.rear_right(0)
 
-def turn_right(turn_speed_right, turn_speed_left):
-    right_wheel_speed=0
-    left_wheel_speed=0
+def pid_speed_calculation(refreshrate_in_Hz, base_speed, kp, ki, kd, ks):
+    global last_pos_for_pid, integral
 
-    if turn_speed_right > turn_speed_left and 0<= abs(turn_speed_left) <=100 and 0< abs(turn_speed_right) <=100:
-        right_wheel_speed= int(turn_speed_right)
-        left_wheel_speed= int(turn_speed_left)
+    integral_reset = 0
+    sleep_time_refreshrate = 1 / refreshrate_in_Hz
 
-    motor.front_left(left_wheel_speed)
-    motor.front_right(right_wheel_speed)
-    motor.rear_left(left_wheel_speed)
-    motor.rear_right(right_wheel_speed)
+    value_sensor_right = sensor.pos_sensor_over_line("right")
+    value_sensor_left = sensor.pos_sensor_over_line("left")
+    value_sensor_mid = sensor.pos_sensor_over_line("mid")
 
-def turn_left(turn_speed_left, turn_speed_right):
-    right_wheel_speed= 0
-    left_wheel_speed= 0
-    if turn_speed_left > turn_speed_right and 0< abs(turn_speed_left) <=100 and 0<= abs(turn_speed_right) <=100:
-        right_wheel_speed= int(turn_speed_right)
-        left_wheel_speed=  int(turn_speed_left)
+    position = sensor.detect_position(
+        value_sensor_left, value_sensor_mid, value_sensor_right
+    )
 
-    motor.front_left(left_wheel_speed)
-    motor.front_right(right_wheel_speed)
-    motor.rear_left(left_wheel_speed)
-    motor.rear_right(right_wheel_speed)
+    if position is None:
+        position = last_pos_for_pid
+        integral = integral_reset
 
-def drive_straight(drive_speed, direction):
-    drive_speed_direction=0
-    if direction == "f":
-        drive_speed_direction = abs(drive_speed)
-    elif direction == "r":
-        drive_speed_direction = (-1)*abs(drive_speed)
-    else:
-        drive_speed_direction = 0
+    proportional = position
+    integral = integral + position
+    derivativ = last_pos_for_pid - position
 
-    motor.front_left(drive_speed_direction)
-    motor.front_right(drive_speed_direction)
-    motor.rear_left(drive_speed_direction)
-    motor.rear_right(drive_speed_direction)
+    limited_integral = max(-20, min(20, integral))
+    integral = limited_integral
 
-def line_detection_start_driving():
-    while True:
-        if sensor.sensor_line("left") == False and sensor.sensor_line("right") == False and sensor.sensor_line("mid"):
-            drive_straight(20, "f")
-        elif sensor.sensor_line("left") == False and sensor.sensor_line("right") and sensor.sensor_line("mid") == False:
-            turn_left(20, 0)
-        elif sensor.sensor_line("left") and sensor.sensor_line("right") == False and sensor.sensor_line("mid") == False:
-            turn_right(20, 0)
-        elif sensor.sensor_line("left") and sensor.sensor_line("right") and sensor.sensor_line("mid"):
-            stop_all_wheels()
+    correction_factor = kp * proportional + ki * limited_integral + kd * derivativ
 
-line_detection_start_driving()
+    dynamic_base_speed = base_speed - (abs(position) * ks)
+    speed_left = dynamic_base_speed + correction_factor
+    speed_right = dynamic_base_speed - correction_factor
+
+    last_pos_for_pid = position
+
+    time.sleep(sleep_time_refreshrate)
+
+    return speed_left, speed_right

@@ -1,7 +1,9 @@
+import logging
+import time
+
 import board
 from adafruit_pca9685 import PCA9685
-import time
-import logging
+
 log = logging.getLogger(__name__)
 # create I2C bus interface
 i2c = board.I2C()
@@ -42,7 +44,7 @@ def stop_all():
     current_speed_rear_right = 0
 
 
-def front_left(speed=50):
+def front_left(speed=0):
     if 0 > abs(speed) < 100:
         log.error(f"speed {speed} outside of range 0-100")
         return
