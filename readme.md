@@ -67,7 +67,7 @@ Um ein Programm (z. B. im Ordner `src`) auszuführen, folge diesen Schritten im 
 
 1.  Stelle sicher, dass die virtuelle Umgebung aktiv ist: `source .robocar/bin/activate`.
 2.  Navigiere in dein Projektverzeichnis.
-3.  Starte das Skript:
+3.  Starte das Skript main.py:
     `python3 src/main.py`.
 
 ***
