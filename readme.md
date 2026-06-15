@@ -4,8 +4,25 @@ PCA9685 PWM-Modul
 3x Liniensensoren
 4x DC-Motoren
 
+# Einmalige Aktivierung des I2C
+*Konfiguration öffnen:*
+**sudo raspi-config**
 
-WICHTIG: Damit alles funktioniert muss das Programm in Linux ausgeführt werden.
+*Interface Options → I2C → Yes* auswählen.
+
+*Raspberry Pi neu starten:*
+**sudo reboot**
+
+*Installation der I²C-Tools:*
+
+**sudo apt update**
+**sudo apt install -y i2c-tools**
+
+*Überprüfen, ob I²C aktiviert ist:*
+**sudo i2cdetect -y 1**
+
+
+WICHTIG: Damit alles funktioniert muss das Programm in *Linux* ausgeführt werden.
 
 # Python-Anwendung zur Hardware-Steuerung am Raspberry Pi
 
