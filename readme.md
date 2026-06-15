@@ -39,7 +39,7 @@ Für eine strukturierte Softwareentwicklung wird die Nutzung von **Visual Studio
     1. Nutzen Sie die Funktion „Connect to Host...“ über das Remote-Window-Symbol in VSC.
     2. Verbinden Sie sich via SSH (`BENUTZERNAME@HOSTNAME.local`).
     3. Öffnen Sie in VSC das Verzeichnis `/home/pi/robocar`.
-*   **Dateierstellung:** Erstellen Sie Ihre Python-Skripte (z. B. `main.py`) direkt im `src`-Verzeichnis innerhalb von VSC.
+
 
 ## 4. Programmausführung
 Die Ausführung der Programme erfolgt über das Terminal in VSC. Achten Sie darauf, dass für die Ausführung von Skripten, die auf Hardware-Ressourcen zugreifen, die virtuelle Umgebung aktiviert sein muss.
@@ -71,4 +71,4 @@ Um ein Programm (z. B. im Ordner `src`) auszuführen, folge diesen Schritten im 
     `python3 src/main.py`.
 
 ***
-*Tipp: Zur besseren Übersicht wird die Verwendung von **Visual Studio Code** mit der Erweiterung „Remote-SSH“ empfohlen, um Dateien direkt auf dem Pi zu bearbeiten.*
+*Tipp: Zur besseren Übersicht wird die Verwendung von **Visual Studio Code** mit der Erweiterung „Remote-SSH“ empfohlen, um Dateien direkt auf dem Pi zu bearbeiten. Es wurde jedoch Festgestellt dass VSCode den Arbeitsspeicher des Raspberries voll macht und deshalb wurde auf die Anwendung **Zed** gewechselt, da diese dieses Problem nicht hat*
